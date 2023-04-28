@@ -14,16 +14,6 @@ resource "aws_elasticache_cluster" "elasticache" {
   
 }
 
-resource "aws_elasticache_subnet_group" "main" {
-  name       = "${var.env}-rds"
-  subnet_ids = var.subnet_ids
-  
-  tags = merge(
-    var.tags, 
-      { Name = "${var.env}-subnet-group" }
-  )
-}
-
 resource "aws_security_group" "main" {
   name        = "elasticache-${var.env}"
   description = "elasticache-${var.env}"
@@ -52,6 +42,18 @@ resource "aws_security_group" "main" {
     
     )
 }
+
+resource "aws_elasticache_subnet_group" "main" {
+  name       = "${var.env}-rds"
+  subnet_ids = var.subnet_ids
+  
+  tags = merge(
+    var.tags, 
+      { Name = "${var.env}-subnet-group" }
+  )
+}
+
+
 
 output "redis" {
   value = aws_elasticache_cluster.elasticache
